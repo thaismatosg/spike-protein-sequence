@@ -1,2 +1,73 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+import sys
+import re
+
+def leArquivoSequencia(nomeArquivo):
+	arq = open(nomeArquivo, "r")
+	linha = arq.read()
+	linha = list(linha.rstrip())
+	linha.insert(0, '-')
+	return(linha)
+
+def leArquivoMutacoes(nomeArquivo):
+	arq = open(nomeArquivo, "r")
+	linha = arq.read()
+	linha = linha.rstrip()
+	m = linha.split(", ")
+	return m
+
+def substituicao(lista, aa1, pos, aa2):
+	if (lista[pos] != aa1):
+		print("A posição",pos,"não contém o aminoácido",aa1)
+		exit()
+	else:
+		lista[pos] = aa2
+
+def fazSubstituicoes(lista, mut):
+	for i in mut: # Percorre a lista de mutações
+		if (i[0:3]!="del" and i[0:3]!="ins"): # São substituições
+			aa1 = i[0]
+			aa2 = i[-1]
+			pos = int(i[1:-1])
+			substituicao(lista, aa1, pos, aa2)
+
+def deleta(lista, pos):
+	lista[pos] = "-"
+
+def fazDelecoes(lista, mut):
+	for i in mut:
+		if (i[0:3]=="del"):
+			i = i.lstrip("del") # del69-70 -> 69-70
+			tmp = i.split("-") #69-70 -> [69, 70]
+			pos1 = int(tmp[0]) # Início do intervalo
+			pos2 = int(tmp[0]) # Pode ser vazio
+			if (len(tmp)>1): # Fim do intervalo
+				pos2 = int(tmp[1])
+			for p in range(pos1, pos2+1):
+				deleta(lista, p)
+
+def insere(lista, pos, aa):
+	lista.insert(pos, aa)
+
+def fazInsercoes(lista, mut):
+	for i in range(len(mut)-1, -1, -1): # Percorrer a lista de trás para frente
+		if (mut[i][0:3]=="ins"):
+			m = mut[i].lstrip("ins")
+			pos = re.search("[\d]+", m) # Buscar 1 ou mais dígitos
+			pos = int(pos.group())
+			seq = re.search("[A-Z]+", m)
+			seq = list(seq.group())
+			seq.reverse()
+			for aa in seq:
+				insere(lista, pos, aa)
+
+def geraSequenciaFinal(lista):
+	seq = ""
+	for i in lista:
+		if i!="-":
+			seq = seq + i
+	return seq
+
+def imprimeComparativo(seq1, seq2):
+	tam = min(len(seq1), len(seq2))
+	for i in range(0, tam):
+		print(i+1, seq1[i], seq2[i])
