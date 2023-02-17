@@ -1,5 +1,6 @@
 # <p align="center">
-  ![Verde Vermelho e Rosa Divertido Título de Curso do D2L](https://user-images.githubusercontent.com/114628584/219532582-4dfdfaa1-4b0e-4d29-b1a2-8991f108c781.jpg)
+  ![Verde Vermelho e Rosa Divertido Título de Curso do D2L](https://user-images.githubusercontent.com/114628584/219532842-65db11a8-e975-4c79-b985-89073a31083f.gif)
+
 
 
 
